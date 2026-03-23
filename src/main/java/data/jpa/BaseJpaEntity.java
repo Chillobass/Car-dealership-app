@@ -15,7 +15,7 @@ public abstract class BaseJpaEntity {
     @Column(name="created_at", updatable = false, nullable = false)
     private Instant createdAt;
 
-    @Column(name="updated_at")
+    @Column(name="updated_at", nullable = false)
     private Instant updatedAt;
 
     @PrePersist
