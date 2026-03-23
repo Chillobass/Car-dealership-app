@@ -1,114 +1,127 @@
 package org.example;
 
-import BusinessLogic.Car;
-import BusinessLogic.CarModel;
-import BusinessLogic.ConfigurationService;
-import BusinessLogic.Context;
-import BusinessLogic.Exceptions.IncompatibleComponentException;
-import BusinessLogic.details.Detail;
-import BusinessLogic.details.DetailCategory;
-import data.Domain.valueObjects.Money;
-import data.RepositoriesImpl.DetailRepositoryImpl;
-import data.RepositoriesImpl.ModelsRepositoryImpl;
+import businessLogic.Car;
+import businessLogic.CarModel;
+import businessLogic.ConfigurationService;
+import businessLogic.Context;
+import businessLogic.details.replaceable.AutomaticTransmission;
+import businessLogic.details.replaceable.ManualTransmission;
+import businessLogic.details.replaceable.Replaceable;
+import businessLogic.exceptions.IncompatibleComponentException;
+import businessLogic.details.Detail;
+import businessLogic.domain.valueObjects.Money;
+import data.repositoriesImpl.CarOrderRepositoryImpl;
+import data.repositoriesImpl.DetailRepositoryImpl;
+import data.repositoriesImpl.CarsRepositoryImpl;
+import data.repositoriesImpl.TestDriveRequestRepositoryImpl;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.*;
 
-import static BusinessLogic.details.BodyType.SEDAN;
-import static BusinessLogic.details.DriveType.FRONT;
-import static BusinessLogic.details.FuelType.PETROL;
-import static BusinessLogic.details.GearBoxType.MECHANIC;
-import static BusinessLogic.details.TransmissionType.MANUAL;
+import static businessLogic.details.irreplaceable.BodyType.SEDAN;
+import static businessLogic.details.irreplaceable.BodyType.UNIVERSAL;
+import static businessLogic.details.irreplaceable.DriveType.FRONT;
+import static businessLogic.details.irreplaceable.FuelType.PETROL;
+import static businessLogic.details.irreplaceable.GearBoxType.MECHANIC;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CarCreationTest {
     @Test
     void test1(){
-        CarModel carModel = new CarModel(UUID.randomUUID(), "Merc", "a80",
-                new Money(new BigDecimal(90)), new HashMap<>());
-
-        ArrayList<CarModel> listik = new ArrayList<CarModel>();
-        Detail detail = new Detail(UUID.randomUUID(), new DetailCategory("cat1", UUID.randomUUID()), "det1",
-                new Money(new BigDecimal(4)), listik);
-
-
-
-        Map<DetailCategory, Detail> forSwap = new HashMap<>();
-        forSwap.put(detail.getCategory(), detail);
-
-
-
-        ModelsRepositoryImpl modRep = new ModelsRepositoryImpl();
-        modRep.add(carModel);
-
-        DetailRepositoryImpl detRep = new DetailRepositoryImpl();
-        detRep.add(detail);
-
-        Context context = new Context(modRep, detRep);
-
-        ConfigurationService config = new ConfigurationService(context);
-
-        Car car = Car.builder()
-                .model(carModel).
-                carID(UUID.randomUUID()).
-                finalPrice(new Money(new BigDecimal(70)))
+        CarModel carModel = CarModel.builder().brand("proudOfChina")
+                .modelName("siDzinPin")
+                .basePrice(new Money(new BigDecimal(70)))
                 .carBody(SEDAN)
                 .fuel(PETROL)
                 .enginePower(100.0)
                 .engineCapacity(50.0)
                 .gearbox(MECHANIC)
                 .carDrive(FRONT)
-                .carColour("black")
-                .transmission(MANUAL).build();
+                .carColor("black")
+                .build();
+
+        Car car = Car.builder().carID(UUID.randomUUID()).model(carModel).build();
+
+        ArrayList<CarModel> listik = new ArrayList<CarModel>();
+
+        Detail detail = new Detail(UUID.randomUUID(),
+                new ManualTransmission(), new Money(new BigDecimal(5)), listik);
+
+
+        Map<Replaceable, Detail> forSwap = new HashMap<>();
+        forSwap.put(detail.getCategory(), detail);
+
+        CarsRepositoryImpl carsRep = new CarsRepositoryImpl();
+        carsRep.add(car);
+
+        DetailRepositoryImpl detRep = new DetailRepositoryImpl();
+        detRep.add(detail);
+
+        CarOrderRepositoryImpl carOrderRepository = new CarOrderRepositoryImpl();
+
+        TestDriveRequestRepositoryImpl testDriveRequestRepository = new TestDriveRequestRepositoryImpl();
+
+        Context context = new Context(carsRep, detRep, carOrderRepository, testDriveRequestRepository);
+
+        var config = new ConfigurationService(context);
+
 
         assertThrows(IncompatibleComponentException.class, () -> config.createConfiguration(car, forSwap));
 
-        assertEquals(modRep.contains(carModel), true);
-        assertEquals(detRep.contains(detail), true);
+        assertEquals(true, carsRep.contains(car));
+        assertEquals(true, detRep.contains(detail));
     }
 
     @Test
     void test2(){
-        CarModel carModel = new CarModel(UUID.randomUUID(), "bmw", "bigBmw",
-                new Money(new BigDecimal(90)), new HashMap<>());
-
-        ArrayList<CarModel> listik = new ArrayList<CarModel>();
-        listik.add(carModel);
-        Detail detail = new Detail(UUID.randomUUID(), new DetailCategory("cat1", UUID.randomUUID()), "det1",
-                new Money(new BigDecimal(4)), listik);
-
-
-        ModelsRepositoryImpl modRep = new ModelsRepositoryImpl();
-        modRep.add(carModel);
-
-        DetailRepositoryImpl detRep = new DetailRepositoryImpl();
-        detRep.add(detail);
-
-        Context context = new Context(modRep, detRep);
-
-        ConfigurationService config = new ConfigurationService(context);
-
-        Car car = Car.builder()
-                .model(carModel).
-                carID(UUID.randomUUID()).
-                finalPrice(new Money(new BigDecimal(70)))
-                .carBody(SEDAN)
+        CarModel carModel = CarModel.builder()
+                .brand("coolBrandYo")
+                .modelName("solarius")
+                .basePrice(new Money(new BigDecimal(70)))
+                .carBody(UNIVERSAL)
                 .fuel(PETROL)
                 .enginePower(100.0)
                 .engineCapacity(50.0)
                 .gearbox(MECHANIC)
                 .carDrive(FRONT)
-                .carColour("black")
-                .transmission(MANUAL).build();
+                .carColor("silver")
+                .build();
 
-        Map<DetailCategory, Detail> swaps = new HashMap<>();
-        swaps.put(detail.getCategory(), detail);
-        config.createConfiguration(car, swaps);
+        ArrayList<CarModel> listik = new ArrayList<CarModel>();
+        listik.add(carModel);
 
-        assertEquals(modRep.contains(carModel), true);
-        assertEquals(detRep.contains(detail), true);
+        var detalkaNaSwap = new Detail(UUID.randomUUID(), new ManualTransmission(), new Money(new BigDecimal(2)), listik);
+        var config1 = new HashMap<Replaceable, Detail>();
+        config1.put(new ManualTransmission(), detalkaNaSwap);
+
+        Car car = Car.builder().carID(UUID.randomUUID()).model(carModel).config(config1).build();
+
+
+        Detail detail = new Detail(UUID.randomUUID(),
+                new AutomaticTransmission(), new Money(new BigDecimal(9)), listik);
+
+
+        Map<Replaceable, Detail> forSwap = new HashMap<>();
+        forSwap.put(detail.getCategory(), detail);
+
+        CarsRepositoryImpl carsRep = new CarsRepositoryImpl();
+        carsRep.add(car);
+
+        DetailRepositoryImpl detRep = new DetailRepositoryImpl();
+        detRep.add(detail);
+
+        CarOrderRepositoryImpl carOrderRepository = new CarOrderRepositoryImpl();
+
+        TestDriveRequestRepositoryImpl testDriveRequestRepository = new TestDriveRequestRepositoryImpl();
+
+        Context context = new Context(carsRep, detRep, carOrderRepository, testDriveRequestRepository);
+
+        var config = new ConfigurationService(context);
+        car = config.createConfiguration(car, forSwap);
+
+
+        assertEquals(true, car.getConfig().values().contains(detail));
     }
-
 }
