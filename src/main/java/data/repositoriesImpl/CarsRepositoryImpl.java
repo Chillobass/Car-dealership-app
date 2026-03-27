@@ -1,13 +1,12 @@
 package data.repositoriesImpl;
 
 import businessLogic.Car;
-import businessLogic.CarModel;
-import data.persistence.repositories.ModelsRepository;
+import data.persistence.repositories.CarsRepository;
 import data.persistence.specifications.Specification;
 
 import java.util.*;
 
-public class CarsRepositoryImpl implements ModelsRepository {
+public class CarsRepositoryImpl implements CarsRepository {
     private final Map<UUID, Car> storage = new HashMap<>();
 
     @Override

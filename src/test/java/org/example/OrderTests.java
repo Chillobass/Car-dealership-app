@@ -22,6 +22,7 @@ import static org.junit.Assert.assertThrows;
 public class OrderTests {
     @Test
     void test3(){
+        // Arrange
         CarModel carModel = CarModel.builder()
                 .brand("anotherBrand")
                 .modelName("lehus")
@@ -40,8 +41,10 @@ public class OrderTests {
         System.out.println("isEnum: " + DefaultOrderState.class.isEnum());
         var carOrder = new CarOrder(new User(UserType.client), new User(UserType.localManager), car, DefaultOrderState.PLACED);
 
+        // Act
         carOrder.transitionTo(DefaultOrderState.MANAGER_APPROVED);
 
+        // Assert
         assertEquals(DefaultOrderState.MANAGER_APPROVED, carOrder.getOrderState());
         assertThrows(IllegalStateException.class, () -> carOrder.transitionTo(DefaultOrderState.COMPLETED));
     }

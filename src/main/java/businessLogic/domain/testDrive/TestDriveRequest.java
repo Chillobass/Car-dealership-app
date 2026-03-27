@@ -10,7 +10,7 @@ public class TestDriveRequest {
     private User customer;
     private Car orderedCar;
     private Timestamp time; // TestDrive start time
-    private Boolean finished;
+    private boolean finished;
 
     public TestDriveRequest(User currentCustomer, Car orderedForTest, Timestamp exactTime) {
         this.customer = currentCustomer;

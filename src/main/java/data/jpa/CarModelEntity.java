@@ -1,35 +1,37 @@
 package data.jpa;
 
-import businessLogic.details.irreplaceable.BodyType;
-import businessLogic.details.irreplaceable.DriveType;
-import businessLogic.details.irreplaceable.FuelType;
-import businessLogic.details.irreplaceable.GearBoxType;
-import businessLogic.domain.valueObjects.Money;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
+@Getter @NoArgsConstructor @AllArgsConstructor
+@Entity @Table(name="car_models")
 public class CarModelEntity extends BaseJpaEntity {
     @Id
-    @Column(name = "model_id")
-    private String modelId;
+    @Column(name = "model_name")
+    private String modelName;
 
-    @Column(name = "brand")
     private String brand;
 
     @Column(name = "base_price")
-    private Money basePrice;
+    private BigDecimal basePrice;
 
     @Column(name = "car_drive")
-    private DriveType carDrive;
+    private String carDrive;
 
     @Column(name = "car_color")
     private String carColor;
 
     @Column(name = "car_body")
-    private BodyType carBody;
+    private String carBody;
 
-    @Column(name = "fuel")
-    private FuelType fuel;
+    private String fuel;
 
     @Column(name = "engine_power")
     private Double enginePower;
@@ -37,6 +39,5 @@ public class CarModelEntity extends BaseJpaEntity {
     @Column(name = "engine_capacity")
     private Double engineCapacity;
 
-    @Column(name = "gearbox")
-    private GearBoxType gearbox;
+    private String gearbox;
 }

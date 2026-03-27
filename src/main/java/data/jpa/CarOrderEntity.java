@@ -3,22 +3,23 @@ package data.jpa;
 import businessLogic.Car;
 import businessLogic.domain.User;
 import businessLogic.domain.carOrder.OrderState;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Entity @Getter @NoArgsConstructor @AllArgsConstructor
 @Table(name = "car_order")
 public class CarOrderEntity extends BaseJpaEntity {
     @Column(name = "customer_id")
-    private User customerId;
+    private UUID customerId;
 
     @Column(name = "manager_id")
-    private User managerId;
+    private UUID managerId;
 
+    @OneToOne @JoinColumn(name="carID")
     @Column(name = "ordered_car_model_id")
     private Car orderedCarModelId;
 

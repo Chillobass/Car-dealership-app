@@ -6,7 +6,7 @@ import data.persistence.specifications.Specification;
 import java.util.List;
 import java.util.UUID;
 
-public interface ModelsRepository {
+public interface CarsRepository {
     Car add(Car carModel);
 
     List<Car> query(Specification<Car> specification);
