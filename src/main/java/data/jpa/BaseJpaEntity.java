@@ -3,11 +3,14 @@ package data.jpa;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
 import java.util.UUID;
 
-@Getter @NoArgsConstructor @MappedSuperclass
+@Getter @Setter
+@NoArgsConstructor @MappedSuperclass @SuperBuilder
 public abstract class BaseJpaEntity {
     @Id
     private UUID id;

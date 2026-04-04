@@ -2,10 +2,10 @@ package data.persistence.specifications;
 
 import businessLogic.Car;
 import businessLogic.CarModel;
-import businessLogic.details.irreplaceable.BodyType;
-import businessLogic.details.irreplaceable.DriveType;
-import businessLogic.details.irreplaceable.FuelType;
-import businessLogic.details.irreplaceable.GearBoxType;
+import businessLogic.details.irreplaceable.bodyType.BodyType;
+import businessLogic.details.irreplaceable.driveType.DriveType;
+import businessLogic.details.irreplaceable.fuelType.FuelType;
+import businessLogic.details.irreplaceable.gearBoxType.GearBoxType;
 import businessLogic.details.replaceable.Transmission;
 import businessLogic.domain.valueObjects.Money;
 
@@ -62,7 +62,7 @@ public class CarSpecifications {
     }
 
     public static Specification<Car> byGearbox(GearBoxType gearbox) {
-        return car -> gearbox.equals(car.getModel().getGearbox());
+        return car -> gearbox.equals(car.getModel().getGearBox());
     }
 
     public static Specification<Car> byTransmission(Transmission transmission) {

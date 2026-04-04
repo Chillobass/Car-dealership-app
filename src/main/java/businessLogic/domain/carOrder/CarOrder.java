@@ -2,15 +2,16 @@ package businessLogic.domain.carOrder;
 
 import businessLogic.Car;
 import businessLogic.domain.User;
+import data.jpa.domainEntities.CarOrderEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
-@AllArgsConstructor
+@AllArgsConstructor @Getter @Setter
 public class CarOrder {
     private User customer;
     private User manager;
     private Car orderedCar;
-    @Getter
     private OrderState orderState;
 
     public void transitionTo(OrderState newState) {

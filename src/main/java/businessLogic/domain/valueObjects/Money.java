@@ -4,8 +4,8 @@ import lombok.Getter;
 
 import java.math.BigDecimal;
 
+@Getter
 public class Money {
-    @Getter
     private BigDecimal money;
 
     public Money(BigDecimal moneyAmount){
@@ -15,14 +15,15 @@ public class Money {
             throw new IllegalArgumentException("what do u mean by negative price value?");
         }
     }
-    public void Add(BigDecimal moneyAmount){
-        money.add(moneyAmount);
-    }
     public void Add(Money moneyAmount){
         money.add(moneyAmount.money);
     }
 
-//    public boolean CompareTo(int anotherInteger){
-//        return this.money.compareTo(new BigDecimal(anotherInteger));
-//    }
+    public Money(int moneyAmount){
+        if (moneyAmount >= 0){
+            this.money = BigDecimal.valueOf(moneyAmount);
+        } else {
+            throw new IllegalArgumentException("what do u mean by negative price value?");
+        }
+    }
 }

@@ -1,7 +1,12 @@
 package data.persistence.repositories;
 
-import businessLogic.domain.carOrder.CarOrder;
+import data.jpa.domainEntities.CarOrderEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.stereotype.Repository;
 
-public interface CarOrderRepository {
-    public void Add(CarOrder carOrder);
+import java.util.UUID;
+
+@Repository
+public interface CarOrderRepository extends JpaRepository<CarOrderEntity, UUID>, JpaSpecificationExecutor<CarOrderEntity> {
 }

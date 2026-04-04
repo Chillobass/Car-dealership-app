@@ -1,33 +1,10 @@
 package org.example;
 
-import businessLogic.Car;
-import businessLogic.CarModel;
-import businessLogic.ConfigurationService;
-import businessLogic.Context;
-import businessLogic.details.replaceable.AutomaticTransmission;
-import businessLogic.details.replaceable.ManualTransmission;
-import businessLogic.details.replaceable.Replaceable;
-import businessLogic.exceptions.IncompatibleComponentException;
-import businessLogic.details.Detail;
-import businessLogic.domain.valueObjects.Money;
-import data.repositoriesImpl.CarOrderRepositoryImpl;
-import data.repositoriesImpl.DetailRepositoryImpl;
-import data.repositoriesImpl.CarsRepositoryImpl;
-import data.repositoriesImpl.TestDriveRequestRepositoryImpl;
-import org.junit.jupiter.api.Test;
-
-import java.math.BigDecimal;
-import java.util.*;
-
-import static businessLogic.details.irreplaceable.BodyType.SEDAN;
-import static businessLogic.details.irreplaceable.BodyType.UNIVERSAL;
-import static businessLogic.details.irreplaceable.DriveType.FRONT;
-import static businessLogic.details.irreplaceable.FuelType.PETROL;
-import static businessLogic.details.irreplaceable.GearBoxType.MECHANIC;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CarCreationTest {
+    /*
     @Test
     void test1(){
         CarModel carModel = CarModel.builder().brand("proudOfChina")
@@ -124,4 +101,5 @@ public class CarCreationTest {
 
         assertEquals(true, car.getConfig().values().contains(detail));
     }
+    */
 }

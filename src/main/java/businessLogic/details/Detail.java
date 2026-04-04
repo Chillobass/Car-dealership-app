@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter @AllArgsConstructor @Builder
@@ -15,7 +16,7 @@ public class Detail {
     private UUID id;
     private Replaceable category;
     private Money price;
-    private List<CarModel> compatibleModels;
+    private Set<UUID> compatibleModels;
 
     public boolean isCompatibleWith(CarModel model) {
         return compatibleModels.contains(model);
