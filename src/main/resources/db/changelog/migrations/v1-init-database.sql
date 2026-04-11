@@ -3,6 +3,7 @@
 --changeset openai:001-create-replaceable-component-type
 CREATE TABLE replaceable_component_type (
     replaceable_component_id UUID PRIMARY KEY,
+    removed BOOLEAN,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
     replaceable_component_type VARCHAR(64) NOT NULL,
@@ -13,6 +14,7 @@ CREATE TABLE replaceable_component_type (
 CREATE TABLE replaceable_component_type_compatible_cars (
     replaceable_component_type_id UUID NOT NULL,
     compatible_cars UUID NOT NULL,
+    removed BOOLEAN,
     PRIMARY KEY (replaceable_component_type_id, compatible_cars),
     CONSTRAINT fk_replaceable_component_type_compatible_cars_owner
         FOREIGN KEY (replaceable_component_type_id) REFERENCES replaceable_component_type(replaceable_component_id) ON DELETE CASCADE
@@ -23,6 +25,7 @@ CREATE TABLE component_types (
      id UUID PRIMARY KEY,
      created_at TIMESTAMP WITH TIME ZONE NOT NULL,
      updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+     removed BOOLEAN,
      irreplaceable_component_type VARCHAR(64) NOT NULL
 );
 
@@ -32,7 +35,8 @@ CREATE TABLE order_state (
      created_at TIMESTAMP WITH TIME ZONE NOT NULL,
      updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
      order_state VARCHAR(64) NOT NULL,
-     state VARCHAR(255) NOT NULL
+     state VARCHAR(255) NOT NULL,
+     removed BOOLEAN
 );
 
 --changeset openai:004-create-users
@@ -40,7 +44,8 @@ CREATE TABLE users (
     user_id UUID PRIMARY KEY,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    user_type VARCHAR(255)
+    user_type VARCHAR(255),
+    removed BOOLEAN
 );
 
 --changeset openai:005-create-car-models
@@ -57,6 +62,7 @@ CREATE TABLE car_models (
     gear_box UUID,
     engine_power DOUBLE PRECISION,
     engine_capacity DOUBLE PRECISION,
+    removed BOOLEAN,
     CONSTRAINT fk_car_models_car_drive
         FOREIGN KEY (car_drive) REFERENCES component_types(id),
     CONSTRAINT fk_car_models_car_body
@@ -77,6 +83,7 @@ CREATE TABLE cars (
       wheels_id UUID,
       transmission_id UUID,
       decor_id UUID,
+      removed BOOLEAN,
       CONSTRAINT fk_cars_model_name
           FOREIGN KEY (model_name) REFERENCES car_models(model_id),
       CONSTRAINT fk_cars_steering_wheel
@@ -96,6 +103,7 @@ CREATE TABLE detail (
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
     category UUID,
     price NUMERIC(38, 10),
+    removed BOOLEAN,
     CONSTRAINT fk_detail_category
         FOREIGN KEY (category) REFERENCES replaceable_component_type(replaceable_component_id)
 );
@@ -120,6 +128,7 @@ CREATE TABLE car_order (
     manager_id UUID,
     ordered_car_id UUID,
     order_state UUID,
+    removed BOOLEAN,
     CONSTRAINT fk_car_order_customer
         FOREIGN KEY (customer_id) REFERENCES users(user_id),
     CONSTRAINT fk_car_order_manager
@@ -138,6 +147,7 @@ CREATE TABLE test_drive_request (
     customer_id UUID,
     ordered_car_id UUID,
     time TIMESTAMP WITH TIME ZONE,
+    removed BOOLEAN,
     finished BOOLEAN NOT NULL DEFAULT FALSE,
     CONSTRAINT fk_test_drive_request_customer
     FOREIGN KEY (customer_id) REFERENCES users(user_id),

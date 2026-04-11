@@ -22,19 +22,19 @@ public class CarModelEntity extends BaseJpaEntity {
     @Column(name = "car_color")
     private String carColor;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "car_drive")
     private IrreplaceableComponentType carDrive;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "car_body")
     private IrreplaceableComponentType carBody;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fuel")
     private IrreplaceableComponentType fuel;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gear_box")
     private IrreplaceableComponentType gearBox;
 

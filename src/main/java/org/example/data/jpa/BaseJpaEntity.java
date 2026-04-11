@@ -1,10 +1,12 @@
 package org.example.data.jpa;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLRestriction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -35,4 +37,9 @@ public abstract class BaseJpaEntity {
     protected void onUpdate() {
         this.updatedAt = Instant.now();
     }
+
+    @SQLRestriction("removed = false")
+    @Builder.Default
+    private boolean removed = false;
+
 }

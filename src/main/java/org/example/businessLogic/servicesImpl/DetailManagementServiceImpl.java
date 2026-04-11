@@ -10,6 +10,7 @@ import org.example.data.persistence.repositories.DetailRepository;
 import org.example.data.persistence.services.DetailManagementService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -20,7 +21,7 @@ import java.util.UUID;
 public class DetailManagementServiceImpl implements DetailManagementService {
     private DetailRepository detailRepository;
 
-    @Override
+    @Override @Transactional
     public DetailResponse add(BigDecimal price, String category) {
         Replaceable a = FromStringToReplaceable.convert(category);
         ReplaceableComponentType b = a.toEntity(new Money(price), new HashSet<UUID>());

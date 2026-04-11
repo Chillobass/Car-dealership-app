@@ -22,7 +22,7 @@ public class CarOrderEntity extends BaseJpaEntity {
     @Column(name = "ordered_car_id")
     private UUID orderedCar;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_state")
     private OrderStateEntity orderState;
 }

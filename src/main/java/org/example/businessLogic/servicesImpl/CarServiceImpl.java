@@ -67,7 +67,7 @@ public class CarServiceImpl implements CarService {
                 .collect(Collectors.toList());
     }
 
-    @Override
+    @Override @Transactional
     public CarResponse createConfiguration(UUID carId, UUID decor, UUID steeringWheel, UUID transmission, UUID wheels) {
         CarEntity carEntity = carsRepository.findById(carId)
                 .orElseThrow(() -> new EntityNotFoundException("no such car in our dealership"));
@@ -117,7 +117,7 @@ public class CarServiceImpl implements CarService {
         swaps.put(detail.getCategory(), detail);
     }
 
-    @Override
+    @Override @Transactional
     public CarResponse createCar(CarCreationRequest request) {
         CarModel model = CarModel.builder()
                 .brand(request.brand())

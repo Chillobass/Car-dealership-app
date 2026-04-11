@@ -1,5 +1,6 @@
 package org.example.businessLogic.servicesImpl;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 import java.util.UUID;
@@ -35,7 +36,7 @@ public class CarOrderServiceImpl implements CarOrderService {
     private UserMapper userMapper;
     private CarMapper carMapper;
 
-    @Override
+    @Override @Transactional
     public ResponseEntity<CarOrderResponse> createOrder(UUID customer, UUID manager, UUID orderedCar) {
 
         CarEntity car = carsRepository.findById(orderedCar).orElseThrow(() -> new EntityNotFoundException("Car not found"));
