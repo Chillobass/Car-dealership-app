@@ -3,6 +3,7 @@ package org.example.application.controllers;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.example.application.requests.CarCreationRequest;
+import org.example.application.requests.ConfigRequest;
 import org.example.application.responses.CarResponse;
 import org.example.data.jpa.domainEntities.DetailEntity;
 import org.example.data.jpa.replaceableEntities.ReplaceableComponentType;
@@ -38,14 +39,9 @@ public class CarController {
     }
 
     @PostMapping("/{carId}/configure")
-    public ResponseEntity<CarResponse> createConfiguration(
-            @PathVariable("carId") UUID carId,
-            @RequestParam(required = false) UUID decor,
-            @RequestParam(required = false) UUID steeringWheel,
-            @RequestParam(required = false) UUID transmission,
-            @RequestParam(required = false) UUID wheels
-    ) {
-        CarResponse response = carService.createConfiguration(carId, decor, steeringWheel, transmission, wheels);
+    public ResponseEntity<CarResponse> createConfiguration(ConfigRequest configRequest) {
+        CarResponse response = carService.createConfiguration(configRequest.carId(), configRequest.decor(),
+                configRequest.steeringWheel(), configRequest.transmission(), configRequest.wheels());
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

@@ -1,4 +1,4 @@
-package org.example.businessLogic.bdToEntityMappers;
+package org.example.businessLogic.Mappers;
 
 import org.example.businessLogic.details.replaceable.*;
 

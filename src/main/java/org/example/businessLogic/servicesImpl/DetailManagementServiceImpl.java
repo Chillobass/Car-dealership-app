@@ -1,10 +1,9 @@
 package org.example.businessLogic.servicesImpl;
 
 import org.example.application.responses.DetailResponse;
-import org.example.businessLogic.bdToEntityMappers.FromStringToReplaceable;
+import org.example.businessLogic.Mappers.FromStringToReplaceable;
 import org.example.businessLogic.details.replaceable.Replaceable;
 import org.example.businessLogic.domain.valueObjects.Money;
-import org.example.data.jpa.domainEntities.DetailEntity;
 import org.example.data.jpa.replaceableEntities.ReplaceableComponentType;
 import org.example.data.persistence.repositories.DetailRepository;
 import org.example.data.persistence.services.DetailManagementService;
@@ -29,12 +28,17 @@ public class DetailManagementServiceImpl implements DetailManagementService {
         return new DetailResponse(b.getId());
     }
 
-    @Override
+    @Override @Transactional
     public void remove(UUID detail) {
         detailRepository.deleteById(detail);
     }
 
+    @Transactional
     public void addCompatibleModel(UUID detailId, UUID carModelId){
         detailRepository.getReferenceById(detailId).getCompatibleCars().add(carModelId);
+    }
+
+    public String getDetail(UUID detailId){
+        return detailRepository.getReferenceById(detailId).toString();
     }
 }

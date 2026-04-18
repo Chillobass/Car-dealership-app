@@ -1,4 +1,4 @@
-package org.example.businessLogic.bdToEntityMappers;
+package org.example.businessLogic.Mappers;
 
 import org.example.businessLogic.details.irreplaceable.Irreplaceable;
 import org.example.businessLogic.details.irreplaceable.bodyType.CoupeBody;
@@ -12,7 +12,6 @@ import org.example.businessLogic.details.irreplaceable.fuelType.ElectricFuel;
 import org.example.businessLogic.details.irreplaceable.fuelType.PetrolFuel;
 import org.example.businessLogic.details.irreplaceable.gearBoxType.AutomaticGearBox;
 import org.example.businessLogic.details.irreplaceable.gearBoxType.MechanicGearBox;
-import org.example.businessLogic.details.replaceable.*;
 
 import java.util.HashMap;
 import java.util.Map;

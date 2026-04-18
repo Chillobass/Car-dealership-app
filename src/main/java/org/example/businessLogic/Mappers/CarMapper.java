@@ -1,4 +1,4 @@
-package org.example.businessLogic.bdToEntityMappers;
+package org.example.businessLogic.Mappers;
 
 import org.example.businessLogic.Car;
 import org.example.businessLogic.details.Detail;
@@ -9,7 +9,6 @@ import org.example.data.jpa.domainEntities.CarEntity;
 import org.example.data.jpa.replaceableEntities.ReplaceableComponentType;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 
 import java.util.HashMap;
 

@@ -8,9 +8,13 @@ import org.springframework.http.ResponseEntity;
 import java.util.UUID;
 
 public interface CarOrderService {
-    ResponseEntity<CarOrderResponse> createOrder(UUID customer, UUID manager, UUID orderedCar);
+    CarOrderResponse createOrder(UUID customer, UUID manager, UUID orderedCar);
 
-    ResponseEntity<CarOrderResponse> transitionTo(UUID carOrder, String newState);
+    CarOrderResponse transitionTo(UUID carOrder, String newState);
+
+    CarOrderResponse getCarOrder(UUID carOrderId);
+
+    void deleteCarOrder(UUID carOrderId);
 
     void delete(UUID id);
 }

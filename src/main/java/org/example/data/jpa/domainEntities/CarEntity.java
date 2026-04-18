@@ -2,6 +2,7 @@ package org.example.data.jpa.domainEntities;
 
 import org.example.data.jpa.BaseJpaEntity;
 import org.example.data.jpa.replaceableEntities.ReplaceableComponentType;
+import org.springframework.data.jpa.repository.EntityGraph;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -8,10 +8,10 @@ import java.util.UUID;
 @Getter @Setter
 public final class User {
     private UserType userType;
-    private UUID userID;
+    private UUID userId;
 
     public User(UserType someType){
         userType = someType;
-        userID = UUID.randomUUID();
+        userId = UUID.randomUUID();
     }
 }

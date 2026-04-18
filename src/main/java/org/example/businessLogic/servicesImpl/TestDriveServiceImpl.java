@@ -2,7 +2,7 @@ package org.example.businessLogic.servicesImpl;
 
 import org.example.application.responses.TestDriveResponse;
 import org.example.businessLogic.Car;
-import org.example.businessLogic.bdToEntityMappers.CarMapper;
+import org.example.businessLogic.Mappers.CarMapper;
 import org.example.businessLogic.exceptions.EntityNotFoundException;
 import org.example.data.jpa.domainEntities.CarEntity;
 import org.example.data.jpa.domainEntities.TestDriveRequestEntity;
@@ -62,7 +62,7 @@ public class TestDriveServiceImpl implements TestDriveService {
         return new TestDriveResponse(entity.getId(), entity.getCustomerId(), entity.getTime());
     }
 
-    @Override
+    @Override @Transactional
     public void deleteTestDrive(UUID request) {
         testDriveRequestRepository.deleteById(request);
     }

@@ -12,9 +12,9 @@ import org.example.businessLogic.domain.carOrder.OrderState;
 import org.example.businessLogic.domain.carOrder.CustomOrderStateToString;
 import org.example.businessLogic.domain.carOrder.DefaultOrderStateToString;
 import org.example.businessLogic.exceptions.EntityNotFoundException;
-import org.example.businessLogic.bdToEntityMappers.CarMapper;
-import org.example.businessLogic.bdToEntityMappers.CarOrderMapper;
-import org.example.businessLogic.bdToEntityMappers.UserMapper;
+import org.example.businessLogic.Mappers.CarMapper;
+import org.example.businessLogic.Mappers.CarOrderMapper;
+import org.example.businessLogic.Mappers.UserMapper;
 import org.example.data.jpa.domainEntities.CarEntity;
 import org.example.data.jpa.domainEntities.CarOrderEntity;
 import org.example.data.jpa.domainEntities.UserEntity;
@@ -37,7 +37,7 @@ public class CarOrderServiceImpl implements CarOrderService {
     private CarMapper carMapper;
 
     @Override @Transactional
-    public ResponseEntity<CarOrderResponse> createOrder(UUID customer, UUID manager, UUID orderedCar) {
+    public CarOrderResponse createOrder(UUID customer, UUID manager, UUID orderedCar) {
 
         CarEntity car = carsRepository.findById(orderedCar).orElseThrow(() -> new EntityNotFoundException("Car not found"));
         UserEntity customerUser = userRepository.findById(customer).orElseThrow(() -> new EntityNotFoundException("Customer not found"));
@@ -52,11 +52,11 @@ public class CarOrderServiceImpl implements CarOrderService {
 
         CarOrderResponse carOrderResponse = carOrderMapper.toDto(validCarOrder);
 
-        return new ResponseEntity<CarOrderResponse>(carOrderResponse, HttpStatus.CREATED);
+        return carOrderResponse;
     }
 
-    @Override
-    public ResponseEntity<CarOrderResponse> transitionTo(UUID carOrder, String newState) {
+    @Override @Transactional
+    public CarOrderResponse transitionTo(UUID carOrder, String newState) {
         CarOrderEntity carOrderEntity = carOrderRepository.findById(carOrder).orElseThrow(() -> new EntityNotFoundException("Car order not found"));
         CarOrder carOrderDomain = carOrderMapper.toDomain(carOrderEntity);
 
@@ -74,11 +74,24 @@ public class CarOrderServiceImpl implements CarOrderService {
 
         carOrderDomain.transitionTo(newOrderState);
         carOrderRepository.save(carOrderMapper.toEntity(carOrderDomain));
-        CarOrderResponse carOrderResponse = carOrderMapper.toDto(carOrderDomain);
-        return new ResponseEntity<CarOrderResponse>(carOrderResponse, HttpStatus.OK);
+
+        return carOrderMapper.toDto(carOrderDomain);
     }
 
     @Override
+    public CarOrderResponse getCarOrder(UUID carOrderId) {
+        CarOrderEntity ent = carOrderRepository.findById(carOrderId).orElseThrow(() -> new EntityNotFoundException("no such entity"));
+        CarOrderResponse response = new CarOrderResponse(
+                ent.getId(), ent.getCustomerId(), ent.getManagerId(), ent.getOrderedCar(), ent.getOrderState().getState());
+        return response;
+    }
+
+    @Override @Transactional
+    public void deleteCarOrder(UUID carOrderId) {
+        carOrderRepository.deleteById(carOrderId);
+    }
+
+    @Override @Transactional
     public void delete(UUID id) {
         carOrderRepository.deleteById(id);
     }

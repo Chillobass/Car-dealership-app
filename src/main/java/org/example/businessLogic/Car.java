@@ -16,7 +16,7 @@ public class Car {
     private CarModel model;
     private UUID carID;
     @Setter
-    private boolean configured;
+    private boolean configured = false;
     private HashMap<Replaceable, Detail> config;
 
     public Money calculatePrice(){

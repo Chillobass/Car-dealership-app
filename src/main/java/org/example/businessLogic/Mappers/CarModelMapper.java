@@ -1,11 +1,7 @@
-package org.example.businessLogic.bdToEntityMappers;
+package org.example.businessLogic.Mappers;
 
 import org.example.businessLogic.CarModel;
 import org.example.businessLogic.details.irreplaceable.Irreplaceable;
-import org.example.businessLogic.details.irreplaceable.bodyType.BodyType;
-import org.example.businessLogic.details.irreplaceable.driveType.DriveType;
-import org.example.businessLogic.details.irreplaceable.fuelType.FuelType;
-import org.example.businessLogic.details.irreplaceable.gearBoxType.GearBoxType;
 import org.example.businessLogic.domain.valueObjects.Money;
 import org.example.data.jpa.domainEntities.CarModelEntity;
 import org.example.data.jpa.irreplaceableEntities.IrreplaceableComponentType;

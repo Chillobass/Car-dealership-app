@@ -17,7 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor @MappedSuperclass @SuperBuilder @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseJpaEntity {
     @Id
-    @GeneratedValue
+    @Column(name = "id", unique = true)
     private UUID id;
 
     @Column(name="created_at", updatable = false, nullable = false)
@@ -29,6 +29,9 @@ public abstract class BaseJpaEntity {
 
     @PrePersist
     protected void onCreate() {
+        if (id == null){
+            id = UUID.randomUUID();
+        }
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
     }

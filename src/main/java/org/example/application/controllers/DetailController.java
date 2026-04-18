@@ -2,6 +2,7 @@ package org.example.application.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.example.application.requests.DetailRequest;
+import org.example.application.responses.CarResponse;
 import org.example.application.responses.DetailResponse;
 import org.example.data.persistence.services.DetailManagementService;
 import org.springframework.http.HttpStatus;
@@ -38,5 +39,11 @@ public class DetailController {
     ) {
         detailManagementService.addCompatibleModel(detailId, carModelId);
         return new ResponseEntity<>(detailId, HttpStatus.OK);
+    }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<String> getDetail(@PathVariable("id") UUID detailId) {
+        String response = detailManagementService.getDetail(detailId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

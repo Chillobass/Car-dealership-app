@@ -4,10 +4,10 @@ import org.example.application.requests.CarCreationRequest;
 import org.example.application.responses.CarResponse;
 import org.example.businessLogic.Car;
 import org.example.businessLogic.CarModel;
-import org.example.businessLogic.bdToEntityMappers.CarMapper;
-import org.example.businessLogic.bdToEntityMappers.DetailMapper;
-import org.example.businessLogic.bdToEntityMappers.FromStringToReplaceable;
-import org.example.businessLogic.bdToEntityMappers.FromToStringIrreplaceable;
+import org.example.businessLogic.Mappers.CarMapper;
+import org.example.businessLogic.Mappers.DetailMapper;
+import org.example.businessLogic.Mappers.FromStringToReplaceable;
+import org.example.businessLogic.Mappers.FromToStringIrreplaceable;
 import org.example.businessLogic.details.replaceable.Replaceable;
 import org.example.businessLogic.domain.valueObjects.Money;
 import org.example.businessLogic.exceptions.EntityNotFoundException;
@@ -23,7 +23,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +90,7 @@ public class CarServiceImpl implements CarService {
         return new CarResponse(carId);
     }
 
-    @Override
+    @Override @Transactional
     public void deleteCar(UUID carId) {
         if (!carsRepository.existsById(carId)) {
             throw new EntityNotFoundException("no such car in our dealership");

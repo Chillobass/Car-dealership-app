@@ -1,6 +1,7 @@
 package org.example.data.jpa.domainEntities;
 
 import org.example.data.jpa.BaseJpaEntity;
+
 import org.example.data.jpa.irreplaceableEntities.IrreplaceableComponentType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
