@@ -1,0 +1,49 @@
+package ru.burunsuzian.data.jpa;
+
+import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SQLRestriction;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.Instant;
+import java.util.UUID;
+
+@Getter @Setter
+@NoArgsConstructor @MappedSuperclass
+@SuperBuilder @EntityListeners(AuditingEntityListener.class)
+public abstract class BaseJpaEntity {
+    @Id
+    @Column(name = "id", unique = true)
+    protected UUID id;
+
+    @Column(name="created_at", updatable = false, nullable = false)
+    @CreatedDate
+    private Instant createdAt;
+
+    @Column(name="updated_at", nullable = false)
+    private Instant updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        if (id == null){
+            id = UUID.randomUUID();
+        }
+        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = Instant.now();
+    }
+
+    @SQLRestriction("removed = false")
+    @Builder.Default
+    private boolean removed = false;
+
+}

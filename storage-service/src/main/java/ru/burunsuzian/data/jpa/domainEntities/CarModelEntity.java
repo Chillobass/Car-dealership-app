@@ -1,0 +1,48 @@
+package ru.burunsuzian.data.jpa.domainEntities;
+
+import ru.burunsuzian.data.jpa.irreplaceableEntities.IrreplaceableComponentType;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import ru.burunsuzian.data.jpa.BaseJpaEntity;
+
+import java.math.BigDecimal;
+
+@Getter @NoArgsConstructor @AllArgsConstructor @SuperBuilder
+@Entity @Table(name="car_models")
+@AttributeOverride(name = "id", column = @Column(name = "model_id"))
+public class CarModelEntity extends BaseJpaEntity {
+    private String brand;
+
+    @Column(name = "base_price")
+    private BigDecimal basePrice;
+
+    @Column(name = "car_color")
+    private String carColor;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "car_drive")
+    private IrreplaceableComponentType carDrive;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "car_body")
+    private IrreplaceableComponentType carBody;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "fuel")
+    private IrreplaceableComponentType fuel;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "gear_box")
+    private IrreplaceableComponentType gearBox;
+
+
+    @Column(name = "engine_power")
+    private Double enginePower;
+
+    @Column(name = "engine_capacity")
+    private Double engineCapacity;
+
+}

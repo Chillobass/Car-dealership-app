@@ -1,1 +1,5 @@
-rootProject.name = 'java-template'
+rootProject.name = 'Chillobass_template'
+
+include 'order-service'
+include 'storage-service'
+include 'common'

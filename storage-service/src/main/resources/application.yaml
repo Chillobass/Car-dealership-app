@@ -1,0 +1,38 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: storage-service
+  datasource:
+    url: jdbc:postgresql://postgres:5432/storage_db
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  liquibase:
+    change-log: classpath:db/db.changelog-master.xml
+    enabled: true
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+    template:
+      observation-enabled: true
+    listener:
+      simple:
+        observation-enabled: true
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8081/realms/car-realm
+          jwk-set-uri: http://keycloak:8080/realms/car-realm/protocol/openid-connect/certs
+
+  logging:
+    level:
+      org.springframework.security: DEBUG
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
