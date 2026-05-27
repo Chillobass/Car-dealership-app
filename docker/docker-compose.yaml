@@ -69,6 +69,7 @@ services:
       KC_ISSUER_URI: http://keycloak:${APP_PORT}/realms/car-realm
       SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_RABBITMQ_PORT: 5672
+      GRPC_CLIENT_STORAGE-CARS-SERVICE_ADDRESS: "static://storage-service:9090"
     depends_on:
       postgres:
         condition: service_healthy
@@ -85,6 +86,7 @@ services:
       dockerfile: storage-service/Dockerfile
     ports:
       - "8082:8082"
+      - "9090:9090"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${DB2}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}

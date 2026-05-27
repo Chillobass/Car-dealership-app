@@ -1,11 +1,8 @@
 package ru.burunsuzian.data.jpa.domainEntities;
 
+import lombok.*;
 import ru.burunsuzian.data.jpa.replaceableEntities.ReplaceableComponentType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import ru.burunsuzian.data.jpa.BaseJpaEntity;
 
@@ -34,4 +31,8 @@ public class CarEntity extends BaseJpaEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="decor_id")
     private ReplaceableComponentType decor;
+
+    @Builder.Default
+    @Column(name = "is_available", nullable = false)
+    private boolean isAvailable = true;
 }

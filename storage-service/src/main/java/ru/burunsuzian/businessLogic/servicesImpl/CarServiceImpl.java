@@ -191,4 +191,11 @@ public class CarServiceImpl implements CarService {
 
         return new CarResponse(carEntity.getId());
     }
+
+    public void setAvailability(UUID carId, boolean available){
+        CarEntity car = carsRepository.findById(carId).orElseThrow(
+                () -> new EntityNotFoundException("we don't have such car"));
+        car.setAvailable(available);
+        carsRepository.save(car);
+    }
 }

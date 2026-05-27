@@ -5,9 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.burunsuzian.businessLogic.exceptions.CarOrderTransitionException;
-import ru.burunsuzian.businessLogic.exceptions.EntityNotFoundException;
-import ru.burunsuzian.businessLogic.exceptions.IncompatibleComponentException;
+import ru.burunsuzian.businessLogic.exceptions.*;
 
 import java.nio.file.AccessDeniedException;
 import java.time.Instant;
@@ -63,5 +61,17 @@ public class GlobalExceptionHandler {
                 Instant.now()
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(StorageServiceUnavailableException.class)
+    public ResponseEntity<ErrorResponse> handleStorageUnavailable(StorageServiceUnavailableException e){
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), Instant.now()),
+                HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    @ExceptionHandler(CarNotAvailableException.class)
+    public ResponseEntity<ErrorResponse> handleCarNotAvailable(CarNotAvailableException e){
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), Instant.now()),
+                HttpStatus.PRECONDITION_FAILED);
     }
 }

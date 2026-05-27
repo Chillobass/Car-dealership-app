@@ -1,0 +1,36 @@
+syntax = "proto3";
+package storage.v1;
+
+option java_multiple_files = true;
+option java_package = "ru.burunsuzian.grpc.storage.v1";
+option java_outer_classname = "StorageCarsProto";
+
+message CarProto{
+  string car_id = 1;
+  string model_id = 2;
+  string brand = 3;
+  string color = 4;
+  string base_price = 5;
+  bool is_custom_car = 6;
+  bool is_available = 7;
+}
+
+message ListAvailableCarsRequest{}
+
+message ListAvailableCarsResponse{
+  repeated CarProto cars = 1;
+}
+
+message GetAvailableCarRequest{
+  string car_id = 1;
+}
+
+message GetAvailableCarResponse{
+  CarProto car = 1;
+}
+
+service StorageCarsService{
+  rpc ListAvailableCars(ListAvailableCarsRequest) returns (ListAvailableCarsResponse);
+
+  rpc GetAvailableCar(GetAvailableCarRequest) returns (GetAvailableCarResponse);
+}

@@ -36,3 +36,10 @@ management:
   tracing:
     sampling:
       probability: 1.0
+
+grpc:
+  server:
+    port: 9090
+    enable-keep-alive: true
+    keep-alive-time: 30s
+    keep-alive-timeout: 5s

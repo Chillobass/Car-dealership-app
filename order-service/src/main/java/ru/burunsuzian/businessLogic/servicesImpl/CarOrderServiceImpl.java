@@ -12,6 +12,9 @@ import java.util.Objects;
 import java.util.UUID;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.client.RestTemplate;
 import ru.burunsuzian.application.StorageCarDto;
 import ru.burunsuzian.application.events.WarehouseApprovalRequest;
@@ -29,6 +32,8 @@ import ru.burunsuzian.data.persistence.repositories.CarOrderRepository;
 import ru.burunsuzian.data.persistence.repositories.OutboxMessageRepository;
 import ru.burunsuzian.data.persistence.services.CarOrderService;
 import org.springframework.stereotype.Service;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 
 @AllArgsConstructor
 @Service
@@ -40,6 +45,22 @@ public class CarOrderServiceImpl implements CarOrderService {
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
     private Tracer tracer;
+
+    private void propagateJwt(HttpHeaders headers){
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth instanceof JwtAuthenticationToken jwtAuth){
+            headers.setBearerAuth(jwtAuth.getToken().getTokenValue());
+        }
+    }
+
+    private void markAsTaken(UUID carId){
+        HttpHeaders headers = new HttpHeaders();
+        propagateJwt(headers);
+        restTemplate.exchange("http://storage-service:8082/cars/" + carId + "/availability?available=false",
+                HttpMethod.PATCH,
+                new HttpEntity<>(headers),
+                Void.class);
+    }
 
     @Override @Transactional
     public CarOrderResponse createOrder(UUID customer, UUID manager, UUID orderedCar) {
@@ -53,6 +74,8 @@ public class CarOrderServiceImpl implements CarOrderService {
                 carInfo.isCustomCar(),
                 DefaultOrderState.PLACED);
         carOrderRepository.save(carOrderMapper.toEntity(validCarOrder));
+
+        markAsTaken(orderedCar);
 
         CarOrderResponse carOrderResponse = carOrderMapper.toDto(validCarOrder);
 

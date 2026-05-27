@@ -17,4 +17,6 @@ public interface CarService {
     void deleteCar(UUID carId);
 
     CarResponse createCar(CarCreationRequest request);
+
+    void setAvailability(UUID carId, boolean available);
 }

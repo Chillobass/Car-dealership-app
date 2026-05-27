@@ -1,0 +1,7 @@
+grps:
+  server:
+    port: -1
+  client:
+    storage-cars-service:
+      address: "static://localhost:0"
+      negotiation-type: plaintext

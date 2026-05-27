@@ -36,3 +36,11 @@ management:
   tracing:
     sampling:
       probability: 1.0
+
+grpc:
+  server:
+    port: -1
+  client:
+    storage-cars-service:
+      address: "static://storage-service:9090"
+      negotiation-type: plaintext

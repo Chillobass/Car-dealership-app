@@ -70,4 +70,13 @@ public class CarController {
     public ResponseEntity<CarResponse> createCar(CarCreationRequest carCreationRequest){
         return new ResponseEntity<>(carService.createCar(carCreationRequest), HttpStatus.CREATED);
     }
+
+    @PatchMapping("/{id}/availability")
+    @ApiResponse(responseCode = "200", description = "запрос выполнился успешно")
+    @ApiResponse(responseCode = "404", description = "не удалось найти такую машину")
+    @PreAuthorize("hasAnyRole('USER', 'MANAGER', 'ADMIN', 'WAREHOUSE_ADMIN')")
+    public ResponseEntity<Void> setAvailability( @PathVariable("id") UUID carId, @RequestParam("available") boolean available){
+        carService.setAvailability(carId, available);
+        return ResponseEntity.ok().build();
+    }
 }
