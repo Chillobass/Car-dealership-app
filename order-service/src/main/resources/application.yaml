@@ -25,8 +25,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak:8080/realms/car-realm
-          jwk-set-uri: http://keycloak:8080/realms/car-realm/protocol/openid-connect/certs
+          issuer-uri: ${KC_ISSUER_URI:http://localhost:8081/realms/car-realm}
+          jwk-set-uri: ${KC_JWK_SET_URI:http://keycloak:8080/realms/car-realm/protocol/openid-connect/certs}
 
   logging:
     level:

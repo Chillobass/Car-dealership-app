@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import ru.burunsuzian.businessLogic.exceptions.EntityNotFoundException;
 import ru.burunsuzian.data.jpa.domainEntities.CarEntity;
 import ru.burunsuzian.data.persistence.repositories.CarsRepository;
@@ -25,6 +26,7 @@ public class StorageCarsGrpcService extends StorageCarsServiceGrpc.StorageCarsSe
     public void listAvailableCars(){}
 
     @Override
+    @Transactional(readOnly = true)
     @PreAuthorize("hasAnyRole('USER', 'MANAGER', 'ADMIN')")
     public void listAvailableCars(ListAvailableCarsRequest request, StreamObserver<ListAvailableCarsResponse> responseObserver){
         log.info("grpc listAvailableCars: incoming request");
@@ -38,6 +40,9 @@ public class StorageCarsGrpcService extends StorageCarsServiceGrpc.StorageCarsSe
         responseObserver.onCompleted();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAnyRole('USER', 'MANAGER', 'ADMIN')")
     public void getAvailableCar(GetAvailableCarRequest request, StreamObserver<GetAvailableCarResponse> responseObserver){
         log.info("grpc GetAvailableCar: car_id={}", request.getCarId());
 

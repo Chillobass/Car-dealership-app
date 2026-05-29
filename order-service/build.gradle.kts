@@ -39,6 +39,7 @@ dependencies {
     implementation("io.micrometer:micrometer-tracing-bridge-brave")
 
     testImplementation("org.testcontainers:postgresql:1.19.7")
+    testImplementation("io.grpc:grpc-inprocess:1.65.1")
     testImplementation("org.testcontainers:rabbitmq:1.19.7")
     testImplementation("org.springframework.security:spring-security-test")
 }

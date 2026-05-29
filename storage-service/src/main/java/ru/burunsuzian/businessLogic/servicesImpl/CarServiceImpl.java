@@ -133,57 +133,56 @@ public class CarServiceImpl implements CarService {
                 .gearBox(FromToStringIrreplaceable.convert(request.gearBox()))
                 .build();
 
-        HashMap<Replaceable, Detail> config = new HashMap<>();
+//        HashMap<Replaceable, Detail> config = new HashMap<>();
 
-        ReplaceableComponentType steeringWheelDetail = detailRepository.findById(request.steeringWheel()).orElseThrow(() -> new EntityNotFoundException("Car not found"));
-        ReplaceableComponentType decorDetail = detailRepository.findById(request.decor()).orElseThrow(() -> new EntityNotFoundException("Car not found"));
-        ReplaceableComponentType transmissionDetail = detailRepository.findById(request.transmission()).orElseThrow(() -> new EntityNotFoundException("Car not found"));
-        ReplaceableComponentType wheelsDetailDetail = detailRepository.findById(request.wheels()).orElseThrow(() -> new EntityNotFoundException("Car not found"));
-
-        UUID carId = UUID.randomUUID();
-
-        steeringWheelDetail.setReservedBy(carId);
-        decorDetail.setReservedBy(carId);
-        transmissionDetail.setReservedBy(carId);
-        wheelsDetailDetail.setReservedBy(carId);
-
-        DetailEntity steeringWheelDetailEntity = DetailEntity.builder()
-                        .category(steeringWheelDetail)
-                        .price(steeringWheelDetail.getPrice())
-                        .compatibleModels(steeringWheelDetail.getCompatibleCars())
-                        .id(steeringWheelDetail.getId())
-                        .build();
-
-        DetailEntity decorDetailDetailEntity = DetailEntity.builder()
-                .category(decorDetail)
-                .price(decorDetail.getPrice())
-                .compatibleModels(decorDetail.getCompatibleCars())
-                .id(decorDetail.getId())
-                .build();
-
-        DetailEntity transmissionDetailDetailEntity = DetailEntity.builder()
-                .category(transmissionDetail)
-                .price(transmissionDetail.getPrice())
-                .compatibleModels(transmissionDetail.getCompatibleCars())
-                .id(transmissionDetail.getId())
-                .build();
-
-        DetailEntity wheelsDetailDetailDetailEntity = DetailEntity.builder()
-                .category(wheelsDetailDetail)
-                .price(wheelsDetailDetail.getPrice())
-                .compatibleModels(wheelsDetailDetail.getCompatibleCars())
-                .id(wheelsDetailDetail.getId())
-                .build();
-
-        config.put(steeringWheelDetail.toDomain(), detailMapper.toDomain(steeringWheelDetailEntity));
-        config.put(decorDetail.toDomain(), detailMapper.toDomain(decorDetailDetailEntity));
-        config.put(transmissionDetail.toDomain(), detailMapper.toDomain(transmissionDetailDetailEntity));
-        config.put(wheelsDetailDetail.toDomain(), detailMapper.toDomain(wheelsDetailDetailDetailEntity));
+//        ReplaceableComponentType steeringWheelDetail = detailRepository.findById(request.steeringWheel()).orElseThrow(() -> new EntityNotFoundException("Car not found"));
+//        ReplaceableComponentType decorDetail = detailRepository.findById(request.decor()).orElseThrow(() -> new EntityNotFoundException("Car not found"));
+//        ReplaceableComponentType transmissionDetail = detailRepository.findById(request.transmission()).orElseThrow(() -> new EntityNotFoundException("Car not found"));
+//        ReplaceableComponentType wheelsDetailDetail = detailRepository.findById(request.wheels()).orElseThrow(() -> new EntityNotFoundException("Car not found"));
+//
+//        UUID carId = UUID.randomUUID();
+//
+//        steeringWheelDetail.setReservedBy(carId);
+//        decorDetail.setReservedBy(carId);
+//        transmissionDetail.setReservedBy(carId);
+//        wheelsDetailDetail.setReservedBy(carId);
+//
+//        DetailEntity steeringWheelDetailEntity = DetailEntity.builder()
+//                        .category(steeringWheelDetail)
+//                        .price(steeringWheelDetail.getPrice())
+//                        .compatibleModels(steeringWheelDetail.getCompatibleCars())
+//                        .id(steeringWheelDetail.getId())
+//                        .build();
+//
+//        DetailEntity decorDetailDetailEntity = DetailEntity.builder()
+//                .category(decorDetail)
+//                .price(decorDetail.getPrice())
+//                .compatibleModels(decorDetail.getCompatibleCars())
+//                .id(decorDetail.getId())
+//                .build();
+//
+//        DetailEntity transmissionDetailDetailEntity = DetailEntity.builder()
+//                .category(transmissionDetail)
+//                .price(transmissionDetail.getPrice())
+//                .compatibleModels(transmissionDetail.getCompatibleCars())
+//                .id(transmissionDetail.getId())
+//                .build();
+//
+//        DetailEntity wheelsDetailDetailDetailEntity = DetailEntity.builder()
+//                .category(wheelsDetailDetail)
+//                .price(wheelsDetailDetail.getPrice())
+//                .compatibleModels(wheelsDetailDetail.getCompatibleCars())
+//                .id(wheelsDetailDetail.getId())
+//                .build();
+//
+//        config.put(steeringWheelDetail.toDomain(), detailMapper.toDomain(steeringWheelDetailEntity));
+//        config.put(decorDetail.toDomain(), detailMapper.toDomain(decorDetailDetailEntity));
+//        config.put(transmissionDetail.toDomain(), detailMapper.toDomain(transmissionDetailDetailEntity));
+//        config.put(wheelsDetailDetail.toDomain(), detailMapper.toDomain(wheelsDetailDetailDetailEntity));
 
         Car car = Car.builder()
                 .model(model)
                 .configured(false)
-                .config(config)
                 .build();
 
         CarEntity carEntity = carMapper.toEntity(car);
