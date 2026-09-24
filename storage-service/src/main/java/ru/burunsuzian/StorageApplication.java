@@ -17,7 +17,5 @@ public class StorageApplication {
         SpringApplication.run(StorageApplication.class, args);
         System.out.println("Storage service is running!");
         System.out.println("http://localhost:8082/swagger-ui/index.html");
-
-        Set<Integer> set = new HashSet<>();
     }
 }

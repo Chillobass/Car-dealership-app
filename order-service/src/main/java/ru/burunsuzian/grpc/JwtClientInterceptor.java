@@ -2,6 +2,7 @@ package ru.burunsuzian.grpc;
 
 import io.grpc.*;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -14,6 +15,8 @@ public class JwtClientInterceptor implements ClientInterceptor {
     private static final Metadata.Key<String> AUTH_HEADER =
             Metadata.Key.of("authorization", Metadata.ASCII_STRING_MARSHALLER);
     private static final String BEARER_PREFIX = "Bearer ";
+    private static final Metadata.Key<String> TRACE_ID_HEADER =
+            Metadata.Key.of("x-trace-id", Metadata.ASCII_STRING_MARSHALLER);
 
     @Override
     public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next) {
@@ -23,8 +26,10 @@ public class JwtClientInterceptor implements ClientInterceptor {
                 String tokenValue = extractTokenVal();
                 if (tokenValue != null){
                     headers.put(AUTH_HEADER, BEARER_PREFIX + tokenValue);
-                } else{
-                    log.debug("grpc call without jwt");
+                }
+                String traceId = MDC.get("traceId");
+                if (traceId != null){
+                    headers.put(TRACE_ID_HEADER, traceId);
                 }
                 super.start(responseListener, headers);
             }

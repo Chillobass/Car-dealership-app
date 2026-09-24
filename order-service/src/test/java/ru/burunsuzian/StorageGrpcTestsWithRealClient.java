@@ -88,6 +88,7 @@ public class StorageGrpcTestsWithRealClient extends BaseIntegrationTest{
         assertThatThrownBy(() -> client.getAvailableCar(UUID.randomUUID())).isInstanceOf(StorageServiceUnavailableException.class);
     }
 
+    @Test
     void shouldHandleTimeoutWhenServerHangs() throws Exception {
         startServerWith(new StorageCarsServiceGrpc.StorageCarsServiceImplBase() {
             @Override

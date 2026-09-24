@@ -23,8 +23,6 @@ public class StorageCarsGrpcService extends StorageCarsServiceGrpc.StorageCarsSe
     private final CarsRepository carsRepository;
     private final CarGrpcMapper carGrpcMapper;
 
-    public void listAvailableCars(){}
-
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasAnyRole('USER', 'MANAGER', 'ADMIN')")

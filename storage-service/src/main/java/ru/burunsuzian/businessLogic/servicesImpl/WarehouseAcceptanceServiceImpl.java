@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.tracing.TraceContext;
 import io.micrometer.tracing.Tracer;
 import lombok.AllArgsConstructor;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -14,7 +15,6 @@ import ru.burunsuzian.application.responses.WarehouseAcceptanceResponse;
 import ru.burunsuzian.businessLogic.domain.WarehouseAcceptance;
 import ru.burunsuzian.businessLogic.exceptions.EntityNotFoundException;
 import ru.burunsuzian.businessLogic.mappers.WarehouseAcceptanceMapper;
-import ru.burunsuzian.config.RestConfig;
 import ru.burunsuzian.data.jpa.OutboxMessageEntity;
 import ru.burunsuzian.data.jpa.domainEntities.CarEntity;
 import ru.burunsuzian.data.jpa.domainEntities.WarehouseAcceptanceEntity;
@@ -116,9 +116,8 @@ public class WarehouseAcceptanceServiceImpl implements WarehouseAcceptanceServic
         warehouseAcceptanceMapper.updateEntity(domain, entity);
         warehouseAcceptanceRepository.save(entity);
 
-        TraceContext context = tracer.currentTraceContext().context();
-        String currentTraceId = context != null ? context.traceId() : null;
-        String currentSpanId = context != null ? context.spanId() : null;
+        String currentTraceId = MDC.get("traceId");
+        String currentSpanId = null;
 
         WarehouseApprovalResponse response = new WarehouseApprovalResponse(domain.getCarOrderId(), "some_trace", isApproved);
         OutboxMessageEntity outbox = OutboxMessageEntity.builder()

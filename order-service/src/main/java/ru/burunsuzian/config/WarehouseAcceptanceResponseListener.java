@@ -3,6 +3,7 @@ package ru.burunsuzian.config;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,23 +26,36 @@ public class WarehouseAcceptanceResponseListener {
     @RabbitListener(queues = RabbitMqConfig.QUEUE_ORDER_RESULT)
     @Transactional
     public void handleWarehouseResponse(WarehouseApprovalResponse response) throws JsonProcessingException {
-        log.info("TraceID [{}]: Получен ответ от склада для заказа {}", response.traceId(), response.carOrderId());
-
-        CarOrderEntity entity = carOrderRepository.findById(response.carOrderId())
-                .orElseThrow(() -> new EntityNotFoundException("Order not found"));
-
-        CarOrder domain = carOrderMapper.toDomain(entity);
-
-        if (domain.getOrderState() == CustomOrderState.CAR_READY || domain.getOrderState() == CustomOrderState.CANCELLED) {
-            return;
+        if (response.traceId() != null){
+            MDC.put("traceId", response.traceId());
         }
 
-        if (response.isApproved()) {
-            domain.transitionTo(CustomOrderState.WAREHOUSE_APPROVED);
-        } else {
-            domain.transitionTo(CustomOrderState.CANCELLED);
-        }
+        try {
+            log.info("TraceID [{}]: Получен ответ от склада для заказа {}", response.traceId(), response.carOrderId());
 
-        carOrderRepository.save(carOrderMapper.toEntity(domain));
+            CarOrderEntity entity = carOrderRepository.findById(response.carOrderId())
+                    .orElseThrow(() -> new EntityNotFoundException("Order not found"));
+
+            CarOrder domain = carOrderMapper.toDomain(entity);
+
+            if (response.isApproved() && domain.getOrderState() == CustomOrderState.WAREHOUSE_APPROVED) {
+                log.info("Заказ {} уже в статусе WAREHOUSE_APPROVED", response.carOrderId());
+                return;
+            }
+
+            if (domain.getOrderState() == CustomOrderState.CAR_READY || domain.getOrderState() == CustomOrderState.CANCELLED) {
+                return;
+            }
+
+            if (response.isApproved()) {
+                domain.transitionTo(CustomOrderState.WAREHOUSE_APPROVED);
+            } else {
+                domain.transitionTo(CustomOrderState.CANCELLED);
+            }
+
+            carOrderRepository.save(carOrderMapper.toEntity(domain));
+        } finally {
+            MDC.remove("traceId");
+        }
     }
 }

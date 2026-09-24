@@ -1,6 +1,5 @@
 package ru.burunsuzian;
 
-import io.grpc.Status;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;

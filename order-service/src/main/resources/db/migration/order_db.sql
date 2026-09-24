@@ -61,3 +61,5 @@ CREATE INDEX idx_car_order_ordered_car_id ON car_order(ordered_car_id);
 CREATE INDEX idx_car_order_order_state ON car_order(order_state);
 CREATE INDEX idx_test_drive_request_customer_id ON test_drive_request(customer_id);
 CREATE INDEX idx_test_drive_request_ordered_car_id ON test_drive_request(ordered_car_id);
+
+

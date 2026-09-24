@@ -4,6 +4,7 @@ import io.grpc.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.interceptor.GrpcGlobalServerInterceptor;
+import org.slf4j.MDC;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -47,8 +48,32 @@ public class JwtServerInterceptor implements ServerInterceptor {
         }
 
         AbstractAuthenticationToken finalAuth = auth;
+
+        Metadata.Key<String> TRACE_ID_HEADER = Metadata.Key.of("x-trace-id", Metadata.ASCII_STRING_MARSHALLER);
+        String incomingTraceId = headers.get(TRACE_ID_HEADER);
+
         ServerCall.Listener<ReqT> delegate = Contexts.interceptCall(Context.current(), call, headers, next);
         return new ForwardingServerCallListener.SimpleForwardingServerCallListener<>(delegate){
+            private void setupMDC(){
+                if (incomingTraceId != null){
+                    MDC.put("traceId", incomingTraceId);
+                }
+            }
+
+            private void clearMDC(){
+                MDC.remove("traceId");
+            }
+
+            @Override
+            public void onMessage(ReqT message){
+                setupMDC();
+                try{
+                    super.onMessage(message);
+                } finally {
+                    clearMDC();
+                }
+            }
+
             @Override
             public void onHalfClose(){
                 SecurityContextHolder.getContext().setAuthentication(finalAuth);
@@ -56,6 +81,25 @@ public class JwtServerInterceptor implements ServerInterceptor {
                     super.onHalfClose();
                 } finally {
                     SecurityContextHolder.clearContext();
+                }
+            }
+
+            @Override
+            public void onCancel(){
+                setupMDC();
+                try {
+                    super.onCancel();
+                } finally {
+                    clearMDC();
+                }
+            }
+            @Override
+            public void onComplete(){
+                setupMDC();
+                try {
+                    super.onComplete();
+                } finally {
+                    clearMDC();
                 }
             }
         };

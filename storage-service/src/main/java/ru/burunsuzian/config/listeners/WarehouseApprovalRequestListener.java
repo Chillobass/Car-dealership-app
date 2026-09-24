@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import ru.burunsuzian.application.events.WarehouseApprovalRequest;
@@ -23,14 +24,19 @@ public class WarehouseApprovalRequestListener {
     @RabbitListener(queues = RabbitMqConfig.QUEUE_STORAGE_APPROVAL)
     @Transactional
     public void handleOrderPaid(WarehouseApprovalRequest request) throws JsonProcessingException {
-
-        log.info(" Обработка запроса на сборку заказа {}", request.carOrderId());
-
-        if (!warehouseRepository.findAllByCarOrderId(request.carOrderId()).isEmpty()) {
-            log.warn("Сборка для заказа {} уже существует", request.carOrderId());
-            return;
+        if (request.traceId() != null){
+            MDC.put("traceId", request.traceId());
         }
 
-        warehouseService.createWarehouseAcceptance(request.carOrderId(), request.isCustomCar());
+        try {
+            log.info(" Обработка запроса на сборку заказа {}", request.carOrderId());
+            if (!warehouseRepository.findAllByCarOrderId(request.carOrderId()).isEmpty()) {
+                log.warn("Сборка для заказа {} уже существует", request.carOrderId());
+                return;
+            }
+            warehouseService.createWarehouseAcceptance(request.carOrderId(), request.isCustomCar());
+        } finally {
+            MDC.remove("traceId");
+        }
     }
 }

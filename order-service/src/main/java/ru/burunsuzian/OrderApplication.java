@@ -14,6 +14,7 @@ public class OrderApplication {
     public static void main(String[] args){
 
         SpringApplication.run(OrderApplication.class, args);
+        System.out.println("order-service is running as well");
         System.out.println("http://localhost:8083/swagger-ui/index.html");
     }
 }

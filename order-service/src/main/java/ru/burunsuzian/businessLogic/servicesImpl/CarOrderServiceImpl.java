@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.tracing.TraceContext;
 import io.micrometer.tracing.Tracer;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -12,6 +12,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.http.HttpEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -98,9 +99,8 @@ public class CarOrderServiceImpl implements CarOrderService {
                 throw new CarOrderTransitionException("Заказ в обработке");
             }
 
-            TraceContext context = tracer.currentTraceContext().context();
-            String currentTraceId = context != null ? context.traceId() : null;
-            String currentSpanId = context != null ? context.spanId() : null;
+            String currentTraceId = MDC.get("traceId");
+            String currentSpanId = null;
 
             WarehouseApprovalRequest request = new WarehouseApprovalRequest(carOrderDomain.getCarOrderId(), currentTraceId, carOrderDomain.isCustomCar());
             OutboxMessageEntity outboxMessageEntity = OutboxMessageEntity.builder()

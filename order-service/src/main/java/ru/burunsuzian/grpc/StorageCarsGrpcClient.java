@@ -42,9 +42,9 @@ public class StorageCarsGrpcClient {
 
         return switch(code){
             case DEADLINE_EXCEEDED -> new StorageServiceUnavailableException(
-                    "storage-sevice didt respond in time (" + op + ")", e);
+                    "storage-service didn't respond in time (" + op + ")", e);
             case UNAVAILABLE -> new StorageServiceUnavailableException(
-                    "storage-sevice is not available (" + op + ")", e);
+                    "storage-service is not available (" + op + ")", e);
             case NOT_FOUND -> new EntityNotFoundException(desc != null ? desc : "car not found");
 
             case FAILED_PRECONDITION -> new CarNotAvailableException(desc != null ? desc : "car is not available");
